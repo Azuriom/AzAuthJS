@@ -1,0 +1,16 @@
+# JetBrains
+.idea/
+*.iml
+*.iws
+
+# VS Code
+.vscode/
+.history/
+
+# NodeJS
+node_modules/
+logs/
+build/
+
+# Config
+config.ts
