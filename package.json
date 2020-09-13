@@ -1,7 +1,7 @@
 {
   "name": "azuriom-auth",
   "version": "0.1.0",
-  "description": "A NodeJS implementation of the Azuriom Auth API.",
+  "description": "A JavaScript implementation of the Azuriom Auth API.",
   "license": "MIT",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -22,7 +22,6 @@
     "camelcase-keys": "^6.2.2"
   },
   "devDependencies": {
-    "@types/node": "^14.6.1",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
     "eslint": "^7.7.0",
