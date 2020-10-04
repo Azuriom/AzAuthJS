@@ -13,9 +13,6 @@ export class Authenticator {
   constructor(url: string) {
     this.client = axios.create({
       baseURL: `${url}/api/auth`,
-      headers: {
-        'User-Agent': 'AzAuthJS authenticator v1',
-      },
     });
 
     this.client.interceptors.response.use((response) => {
