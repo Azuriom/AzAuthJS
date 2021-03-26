@@ -1,4 +1,4 @@
-export class Role {
+export interface Role {
   readonly id: number;
   name: string;
   color: string;
