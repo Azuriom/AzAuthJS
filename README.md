@@ -16,17 +16,23 @@ npm install azuriom-auth
 ## Usage
 
 ```js
-const AzuriomAuth = require('azuriom-auth');
+import { AuthClient } from 'azuriom-auth'
 
 async function login(email, password) {
-  const authenticator = new AzuriomAuth.Authenticator('<url of your website>');
+  const client = new AuthClient('<url of your website>')
 
-  try {
-    const user = await authenticator.auth(email, password);
+  let result = await client.login(email, password)
 
-    console.log(`Logged in with ${user.email}`);
-  } catch (e) {
-    console.log(e);
+  if (result.status === 'pending' && result.requires2fa) {
+    const twoFactorCode = '' // IMPORTANT: Replace with the 2FA user temporary code
+
+    result = await client.login(email, password, twoFactorCode)
   }
+
+  if (result.status !== 'success') {
+    throw 'Unexpected result: ' + JSON.stringify(result)
+  }
+
+  return result
 }
 ```

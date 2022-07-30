@@ -1,6 +1,6 @@
 {
   "name": "azuriom-auth",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "A JavaScript implementation of the Azuriom Auth API.",
   "license": "MIT",
   "main": "build/index.js",
@@ -18,16 +18,16 @@
     "lint": "eslint src/**/*.ts"
   },
   "dependencies": {
-    "axios": "^0.21.2",
-    "camelcase-keys": "^6.2.2"
+    "axios": "^0.27.2",
+    "camelcase-keys": "^7.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
-    "@typescript-eslint/parser": "^4.19.0",
-    "eslint": "^7.22.0",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.0.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "prettier": "^2.2.1",
-    "typescript": "^4.2.3"
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4"
   }
 }

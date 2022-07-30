@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es6",
+        "target": "es2018",
         "declaration": true,
-        "outDir": "build"
+        "outDir": "build",
+        "esModuleInterop": true
     },
     "include": [
         "src/**/*"
