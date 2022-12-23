@@ -1,6 +1,6 @@
 {
   "name": "azuriom-auth",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A JavaScript implementation of the Azuriom Auth API.",
   "license": "MIT",
   "main": "build/index.js",
@@ -18,7 +18,7 @@
     "lint": "eslint src/**/*.ts"
   },
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.1.0",
     "camelcase-keys": "^7.0.0"
   },
   "devDependencies": {

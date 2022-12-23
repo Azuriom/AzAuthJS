@@ -1,7 +1,7 @@
 # AzAuth JS
 
-[![Node.js CI](https://img.shields.io/github/workflow/status/Azuriom/AzAuthJS/Node.js%20CI?style=flat-square)](https://github.com/Azuriom/AzAuthJS/actions)
-[![Language grade](https://img.shields.io/lgtm/grade/javascript/github/Azuriom/AzAuthJS?label=code%20quality&logo=lgtm&logoWidth=18&style=flat-square)](https://lgtm.com/projects/g/Azuriom/AzAuthJS/context:javascript)
+[![Node.js CI](https://img.shields.io/github/actions/workflow/status/Azuriom/AzauthJS/tests.yml?branch=master&style=flat-square)](https://github.com/Azuriom/AzAuthJS/actions/workflows/build.yml)
+[![Code QL](https://img.shields.io/github/actions/workflow/status/Azuriom/AzauthJS/codeql.yml?branch=master&style=flat-square)](https://github.com/Azuriom/AzAuthJS/actions/workflows/codeql.yml)
 [![npm Version](https://img.shields.io/npm/v/azuriom-auth.svg?style=flat-square)](https://www.npmjs.org/package/azuriom-auth)
 [![Chat](https://img.shields.io/discord/625774284823986183?color=5865f2&label=Discord&logo=discord&logoColor=fff&style=flat-square)](https://azuriom.com/discord)
 
