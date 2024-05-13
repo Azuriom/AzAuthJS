@@ -11,6 +11,3 @@
 node_modules/
 logs/
 build/
-
-# Config
-config.ts

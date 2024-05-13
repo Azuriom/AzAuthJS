@@ -1,10 +1,12 @@
-import axios, { AxiosError, AxiosInstance } from 'axios'
-import camelcaseKeys from 'camelcase-keys'
-import { User } from './models'
+import type { AxiosInstance } from 'axios'
+import type { User } from './models'
 
-function parseDates(data) {
-  if ('createdAt' in data) {
-    data.createdAt = new Date(data.createdAt)
+import axios from 'axios'
+import camelcaseKeys from 'camelcase-keys'
+
+function parseDates(data: unknown & { createdAt: unknown }) {
+  if (typeof data.createdAt === 'string') {
+    return { ...data, createdAt: new Date(data.createdAt) }
   }
   return data
 }
@@ -51,14 +53,11 @@ export class AuthClient {
       .then((response) => ({ status: 'success', ...response.data }))
       .catch((error) => {
         // Inject the 'requires2fa' property in the result
-        if (axios.isAxiosError(error) && error.response) {
-          // See https://github.com/axios/axios/pull/4344
-          const result = (error as AxiosError<LoginResult>).response.data
+        if (axios.isAxiosError<LoginResult>(error) && error.response) {
+          const result = error.response.data
 
           if (result.status === 'pending' && result.reason === '2fa') {
-            result.requires2fa = true
-
-            return result
+            return { ...result, requires2fa: true }
           }
         }
 
