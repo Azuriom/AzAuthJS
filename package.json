@@ -1,28 +1,43 @@
 {
   "name": "azuriom-auth",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A JavaScript implementation of the Azuriom Auth API.",
-  "license": "MIT",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
   "keywords": [
     "azuriom"
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/Azuriom/AzAuthJS.git"
   },
+  "files": [
+    "build"
+  ],
+  "sideEffects": false,
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "require": "./build/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
-    "format": "biome format --write ./src",
-    "lint": "biome check ./src"
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
   },
   "dependencies": {
-    "axios": "^1.6.0",
-    "camelcase-keys": "^7.0.0"
+    "itty-fetcher": "^1.0.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.3",
-    "typescript": "^5.4.5"
+    "oxfmt": "^0.52.0",
+    "oxlint": "^1.63.0",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

@@ -1,25 +1,33 @@
-import type { AxiosInstance } from 'axios'
-import type { User } from './models'
+import { fetcher } from 'itty-fetcher'
 
-import axios from 'axios'
-import camelcaseKeys from 'camelcase-keys'
+import type { LoginResult, User } from './types'
 
-function parseDates(data: unknown & { createdAt: unknown }) {
-  if (typeof data.createdAt === 'string') {
-    return { ...data, createdAt: new Date(data.createdAt) }
-  }
-  return data
+export type { LoginResult, Role, User } from './types'
+
+function camelCase(s: string): string {
+  return s.replace(/_([a-z])/g, (_, letter: string) => letter.toUpperCase())
 }
 
-export { Role, User } from './models'
+function camelCaseKeys<T>(value: T): T {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return value
+  }
 
-export type LoginResult =
-  | ({ status: 'success' } & User)
-  | { status: 'pending'; reason: string; message: string; requires2fa: boolean }
-  | { status: 'error'; reason: string; message: string }
+  return Object.fromEntries(Object.entries(value).map(([key, val]) => [camelCase(key), val])) as T
+}
+
+function parseDates<T>(value: T): T {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || !('createdAt' in value)) {
+    return value
+  }
+
+  return typeof value.createdAt === 'string'
+    ? { ...value, createdAt: new Date(value.createdAt) }
+    : value
+}
 
 export class AuthClient {
-  private client: AxiosInstance
+  private readonly client
 
   /**
    * Creates a new authenticator instance.
@@ -27,42 +35,43 @@ export class AuthClient {
    * @param url - The website URL
    */
   constructor(url: string) {
-    this.client = axios.create({
-      baseURL: `${url}/api/auth`,
-    })
-
-    this.client.interceptors.response.use((response) => {
-      return {
-        ...response,
-        data: parseDates(camelcaseKeys(response.data)),
-      }
+    this.client = fetcher({
+      base: `${url}/api/auth`,
+      after: [(data: object) => parseDates(camelCaseKeys(data))],
     })
   }
 
   /**
-   * Authenticate a user using his credentials and generate a unique access token.
+   * Authenticate a user using credentials and generate a unique access token.
    *
    * @param email - The user email address
    * @param password - The user password
-   * @param code - The user 2FA code
-   * @returns The user profile with the unique access token
+   * @param code - The user 2FA code, only required after a pending 2FA response
+   * @returns The user profile with the unique access token, a pending 2FA result
    */
-  public async login(email: string, password: string, code: string = null): Promise<LoginResult> {
-    return this.client
-      .post('/authenticate', { email, password, code })
-      .then((response) => ({ status: 'success', ...response.data }))
-      .catch((error) => {
-        // Inject the 'requires2fa' property in the result
-        if (axios.isAxiosError<LoginResult>(error) && error.response) {
-          const result = error.response.data
+  public async login(email: string, password: string, code?: string | null): Promise<LoginResult> {
+    const payload = { email, password, ...(code ? { code } : {}) }
 
-          if (result.status === 'pending' && result.reason === '2fa') {
-            return { ...result, requires2fa: true }
-          }
-        }
+    try {
+      const user = await this.client.post<unknown, User>('/authenticate', payload)
 
+      return { status: 'success', ...user }
+    } catch (error) {
+      if (!error || typeof error !== 'object' || !('reason' in error)) {
         throw error
-      })
+      }
+
+      const response = error as LoginResult
+      if (response.status === 'pending' && response.reason === '2fa') {
+        return { ...response, requires2fa: true }
+      }
+
+      if (response.status === 'error') {
+        return response
+      }
+
+      throw error
+    }
   }
 
   /**
@@ -72,9 +81,7 @@ export class AuthClient {
    * @returns The user profile
    */
   public verify(accessToken: string): Promise<User> {
-    return this.client
-      .post('/verify', { access_token: accessToken })
-      .then((response) => response.data)
+    return this.client.post<unknown, User>('/verify', { access_token: accessToken })
   }
 
   /**
@@ -82,9 +89,7 @@ export class AuthClient {
    *
    * @param accessToken - The user unique access token to invalidate
    */
-  public logout(accessToken: string): Promise<void> {
-    return this.client
-      .post('/logout', { access_token: accessToken })
-      .then((response) => response.data)
+  public async logout(accessToken: string): Promise<void> {
+    return this.client.post('/logout', { access_token: accessToken })
   }
 }
